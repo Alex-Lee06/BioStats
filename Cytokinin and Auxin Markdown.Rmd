@@ -8,3 +8,5 @@ output: html_document
 ##Introduction
 
 Researchers have previously studied the interactions between auxin and cytokinin hormone signalling pathways.  Previous analyses have found very few genes to be differentially expressed in relation to these interactions during the process of apical dominance. The purpose of this study is to conduct revised analyses with the intention of obtaining more information about which genes play a role in auxin-cytokinin interactions in the context of apical dominance. 
+
+Specifically, we would like to know if there are more genes that are differentially expressed than previously found.  If more genes are found, we would like to 
