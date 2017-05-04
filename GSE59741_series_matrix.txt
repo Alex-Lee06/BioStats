@@ -1,4 +1,4 @@
-!Series_title	"Response of cauline buds to apical auxin and basal cytokinin treatment"
+﻿!Series_title	"Response of cauline buds to apical auxin and basal cytokinin treatment"
 !Series_geo_accession	"GSE59741"
 !Series_status	"Public on Dec 25 2016"
 !Series_submission_date	"Jul 24 2014"
