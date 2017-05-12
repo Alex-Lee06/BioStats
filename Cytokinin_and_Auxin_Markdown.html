@@ -128,13 +128,19 @@ $(document).ready(function () {
 <h2>Introduction</h2>
 <p>1.) In plants, apical dominance occurs when auxin (a hormone that acidifies cell walls by causing cells to pump hydrogen atoms into the cell wall) travels rootward down the stalk, inhibiting axillary branching from occurring. This is an indirect influence via secondary messengers. Auxin downregulates cytokinin (CK), a hormone that increases bud growth. When a plant is decapitated, the auxin source is removed and bud growth and expression of Isopentenyl transferase (IPT) - an enzyme involved in prenylation of adenines as cytokinins - are more likely to increase.</p>
 <p>Researchers have previously studied the interactions between auxin and cytokinin hormone signalling pathways in the <em>Arabidopsis thaliana</em> plant. Analyses found very few differentially expressed genes. We will analyze the same data and determine if we have obtained comparable results.</p>
-<p>2.) Specifically, we would like to know if there are more or less genes that are differentially expressed than previously found. We will then discuss our findings.</p>
+<p>2.) Specifically, we would like to know if there are more or less genes that are differentially expressed than previously found. Once we have an answer to our question, we will discuss our findings.</p>
 <p>3.)</p>
-<div id="hypothesis-1" class="section level5">
-<h5>Hypothesis 1:</h5>
-<p>With a lower adjusted p-value than was originally used, we will find less differentially expressed genes in the auxin-cytokinin pathway of apical dominance.</p>
+<div id="hypothesis" class="section level6">
+<h6>Hypothesis:</h6>
+<p>With a lower adjusted p-value and larger fold-change than was originally used, we will find less differentially expressed genes in the auxin-cytokinin pathway of apical dominance.</p>
 <p>4.) The data we will be using is from the <em>Arabidopsis thaliana</em> plant and obtained from NCBI GEO: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE59741" class="uri">https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE59741</a>. The basis for our exploratory analyses is a research paper, “Cytokinin is required for escape but not release from auxin mediated apical dominance” (Muller et al, 2015). Although a hypothesis was not clearly stated, the portion of the research paper that is of interest to us is located in the <em>Identification of auxin- and CK-responsive genes in buds</em> section.</p>
-<p>Two sets of variables were tested. One was Ethanol Control vs Auxin-treated. The other was Auxin-treated control vs basal CK-treated plus Auxin-treated. At a .05 adjusted p-value, only 2 genes were found to be significantly differentially expressed. At1g7540 (codes for cytokinin oxidase), and At2g33830 (associated with bud dormancy).</p>
+<p>Two sets of variables were tested. One was Ethanol Control (E) vs Auxin-treated (A) which we will refer to as the E vs A group. The other was (Auxin-treated (A) control vs basal CK-treated plus Auxin-treated (B) which we will refer to as the A vs B group. A microarray study was conducted and a linear fitted model used. At a .05 adjusted p-value, only 2 genes were found to be significantly differentially expressed. At1g7540 (codes for cytokinin oxidase), and At2g33830 (associated with bud dormancy) were more highly expressed in the A vs B group than in the E vs A group.</p>
+<p>Additionally, genes with a fold-change of two or less in the A vs E group but with a fold-change of two or more in the E vs A group were determined to be significantly differentially expressed. In this case, the top 12 genes (upregulated 5-fold or more) that are known for their cytokinin responsiveness were chosen for further testing.</p>
+</div>
+<div id="anaylisis-results" class="section level4">
+<h4>Anaylisis &amp; Results</h4>
+<p>1.) We will be using R to conduct the lmfit method used by Muller et al (2015). Analyses will be conducted where we change the adjusted p-value threshold from .05 to .01, and the fold-change threshold from 2-fold or less in the E vs A group to 5-fold or less and 2-fold or more in the A vs B group to 5-fold or more.</p>
+<p>2.)</p>
 </div>
 <div id="limitations" class="section level4">
 <h4>Limitations</h4>
