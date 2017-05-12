@@ -32,6 +32,13 @@ Additionally, genes with a fold-change of two or less in the A vs E group but wi
 
 2.)
 
+To begin the markdown the libraries for Limma and Affy needs to be loaded.
+
+```{r}
+library(limma)
+library(affy)
+```
+
 #####a.)
 
 First, we used a text file and organized the data:
@@ -67,7 +74,12 @@ diff_exp = eBayes(fit2)
 #####c.)
 
 Here, we set up a Venn diagram to view the differentially expressed genes at a .01 p-value:
+```{r}
+result = decideTests(diff_exp, p.value = 0.01)
+vennDiagram(result)
+```
 
+With the change of the p.value we obtain the same results as the experiment done by the experts
 ```{r}
 result = decideTests(diff_exp, p.value = 0.001)
 vennDiagram(result)

@@ -26,7 +26,7 @@ fit2 = contrasts.fit(fit, contMatrix)
 diff_exp = eBayes(fit2)
 
 #creates a venn diagram of the top genes with specified p.value
-result = decideTests(diff_exp, p.value = 0.001)
+result = decideTests(diff_exp, p.value = 0.01)
 vennDiagram(result)
 
 #uses the affymetrix information from affy themselves
