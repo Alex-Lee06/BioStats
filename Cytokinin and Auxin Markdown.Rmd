@@ -17,18 +17,18 @@ Researchers have previously studied the interactions between auxin and cytokinin
 
 ######Hypothesis:  
 
-With a lower p-value and larger fold-change than was originally used, we will find less differentially expressed genes in the auxin-cytokinin pathway of apical dominance.
+We will find the same number of genes that are differentially expressed between the B and E group if we run analyses at a .05 level.
 
 
 4.) The data we will be using is from the *Arabidopsis thaliana* plant and obtained from NCBI GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE59741.  The basis for our exploratory analyses is a research paper, "Cytokinin is required for escape but not release from auxin mediated apical dominance" (Muller et al, 2015).  Although a hypothesis was not clearly stated, the portion of the research paper that is of interest to us is located in the *Identification of auxin- and CK-responsive genes in buds* section.
 
-Two sets of variables were tested.  One was Ethanol Control (E) vs Auxin-treated (A) which we will refer to as the E vs A group.  The other was (Auxin-treated (A) control vs basal CK-treated plus Auxin-treated (B) which we will refer to as the A vs B group.  A microarray study was conducted and a linear fitted model used. At a .05 adjusted p-value, only 2 genes were found to be significantly differentially expressed.  At1g7540 (codes for cytokinin oxidase), and At2g33830 (associated with bud dormancy) were more highly expressed in the A vs B group than in the E vs A group.
+Two sets of variables were tested.  One was Auxin-treated (A) vs Ethanol Control (E)  which we will refer to as the AvE group.  The other was  basal CK-treated plus Auxin-treated (B) vs Auxin-treated (A) control  which we will refer to as the BvA group.  A microarray study was conducted to compare the results of B with E (Diff) and a linear fitted model was used. At a .05 adjusted p-value, only 2 genes were found to be significantly differentially expressed.  At1g7540 (codes for cytokinin oxidase), and At2g33830 (associated with bud dormancy) were more highly expressed in the B group than in the E  group.
 
-Additionally, genes with a fold-change of two or less in the A vs E group but with a fold-change of two or more in the E vs A group were determined to be significantly differentially expressed.  In this case, the top 12 genes (upregulated 5-fold or more) that are known for their cytokinin responsiveness were chosen for further testing.
+Additionally, genes with a fold-change of two or less in the E group but with a fold-change of two or more in the B group were determined to be significantly differentially expressed. 
 
 ####Anaylisis & Results
 
-1.)  We will be using R to conduct the lmfit method used by Muller et al (2015). Analyses will be conducted where we change the adjusted p-value threshold from .05 to .01, and the fold-change threshold from 2-fold or less in the E vs A group to 5-fold or less and 2-fold or more in the A vs B group to 5-fold or more.
+1.)  We will be using R to conduct the lmfit method used by Muller et al (2015). 
 
 2.)
 
@@ -37,13 +37,15 @@ Additionally, genes with a fold-change of two or less in the A vs E group but wi
 First, we used a text file and organized the data:
 
 ```{r}
+library(limma)
+library(affy)
 pd = read.AnnotatedDataFrame("sample.txt",header=TRUE,sep=",",row.names=1)
 mydata = ReadAffy(filenames=pd$filename,phenoData=pd,verbose = TRUE)
 sampleNames(mydata)=row.names(pData(pd))
 eset = rma(mydata)
 expression_data = exprs(eset)
 
-TS = factor(pd$treatment, levels = c("E", "A", "B"))
+TS = factor(pd$treatment, levels = c("E","A", "B"))
 
 exp_design = model.matrix(~ 0 +TS)
 colnames(exp_design)=levels(TS)
@@ -57,7 +59,7 @@ Then we created a linear fit model of the expression data, compared the treatmen
 ```{r}
 fit=lmFit(eset,exp_design)
 
-contMatrix= makeContrasts(AvE = A - E, BvA = B - A, BvE = B - E, levels = exp_design)
+contMatrix= makeContrasts(AvE=A-E, BvA=B-A, Diff= (B-A) - (E-A), levels= exp_design)
 
 fit2 = contrasts.fit(fit, contMatrix)
 
@@ -66,13 +68,67 @@ diff_exp = eBayes(fit2)
 
 #####c.)
 
-Here, we set up a Venn diagram to view the differentially expressed genes at a .01 p-value:
+Here, we set up a Venn diagram to view the differentially expressed genes at a .05 p-value:
 
 ```{r}
-result = decideTests(diff_exp, p.value = 0.001)
+
+result = decideTests(diff_exp, p.value = 0.05)
 vennDiagram(result)
 ```
 
+There are two differentially expressed genes between B and E.
+
+#####d.)
+
+Then we used affy to retrieve information at the probeset level, specified top data with a p-value of .05, and chose to view the gene names of the compared treatments:
+```{r}
+
+f = "ftp://ftp.arabidopsis.org/Microarrays/Affymetrix/affy_ATH1_array_elements-2010-12-20.txt"
+annots = read.delim(f, na.strings ="", fill=TRUE, header = T, sep="\t")
+annots = annots[,c(1,5,6)]
+
+
+N = dim(eset)[1]
+top.A.AvE = toptable(diff_exp, coef=1, number = N, p.value = 0.05)
+top.B.BvA = toptable(diff_exp, coef=2, number = N, p.value = 0.05)
+top.Diff = toptable(diff_exp, coef = 3, number = N, p.value = 0.05)
+
+#shows the gene names of compared treatments.
+row.names(annots) = annots$array_element_name
+top.B.BvA.merged = merge(annots, top.B.BvA, by = "row.names")
+top.A.AvE.merged = merge(annots, top.A.AvE, by = "row.names")
+top.Diff.merged = merge(annots, top.Diff, by = "row.names")
+
+```
+
+The only gene that is significantly differentially expressed in the Diff expression at a .05 level is , and it is a 
+
+#####e.)
+
+To show the genes from above that are shown, 
+
+```{r}
+genes.B.BvA = unique(top.B.BvA.merged$locus)
+genes.Diff = unique(top.Diff.merged$locus)
+genes.A.AvE = unique(top.A.AvE.merged$locus)
+
+#shows the log fold changes of each compared treatment
+logFC = top.Diff.merged[,'logFC']
+logFC_AvE = top.A.AvE.merged[,'logFC']
+logFC_BvE = top.B.BvA.merged[,'logFC']
+```
+
+
+3.)  Here is a histogram and scatter plot of the information we obtained through our analyses:
+
+```{r}
+
+hist(logFC)
+
+plot(logFC)
+plot(logFC_AvE)
+plot(logFC_BvE)
+```
 
 ####Limitations
 
