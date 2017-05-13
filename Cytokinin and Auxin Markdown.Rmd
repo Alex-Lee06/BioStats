@@ -44,8 +44,6 @@ library(affy)
 First, we used a text file and organized the data:
 
 ```{r}
-library(limma)
-library(affy)
 pd = read.AnnotatedDataFrame("sample.txt",header=TRUE,sep=",",row.names=1)
 mydata = ReadAffy(filenames=pd$filename,phenoData=pd,verbose = TRUE)
 sampleNames(mydata)=row.names(pData(pd))
@@ -75,24 +73,15 @@ diff_exp = eBayes(fit2)
 
 #####c.)
 
-<<<<<<< HEAD
 Here, we set up a Venn diagram to view the differentially expressed genes at a .05 p-value:
-=======
-Here, we set up a Venn diagram to view the differentially expressed genes at a .01 p-value:
-```{r}
-result = decideTests(diff_exp, p.value = 0.01)
-vennDiagram(result)
-```
->>>>>>> d91f620fe991c0055d4820159d033f93a8bc3f06
 
-With the change of the p.value we obtain the same results as the experiment done by the experts
 ```{r}
 
 result = decideTests(diff_exp, p.value = 0.05)
 vennDiagram(result)
 ```
 
-There are two differentially expressed genes between B and E.
+This shows there are two differentially expressed genes between B and E.
 
 #####d.)
 
@@ -134,17 +123,6 @@ logFC_AvE = top.A.AvE.merged[,'logFC']
 logFC_BvE = top.B.BvA.merged[,'logFC']
 ```
 
-
-3.)  Here is a histogram and scatter plot of the information we obtained through our analyses:
-
-```{r}
-
-hist(logFC)
-
-plot(logFC)
-plot(logFC_AvE)
-plot(logFC_BvE)
-```
 
 ####Limitations
 
