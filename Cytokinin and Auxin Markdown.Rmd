@@ -32,7 +32,7 @@ Additionally, genes with a fold-change of two or less in the E group but with a 
 
 2.)
 
-To begin the markdown the libraries for Limma and Affy needs to be loaded.
+To begin the markdown the libraries for Limma and Affy need to be loaded.
 
 ```{r}
 library(limma)
@@ -98,7 +98,6 @@ top.A.AvE = toptable(diff_exp, coef=1, number = N, p.value = 0.05)
 top.B.BvA = toptable(diff_exp, coef=2, number = N, p.value = 0.05)
 top.Diff = toptable(diff_exp, coef = 3, number = N, p.value = 0.05)
 
-#shows the gene names of compared treatments.
 row.names(annots) = annots$array_element_name
 top.B.BvA.merged = merge(annots, top.B.BvA, by = "row.names")
 top.A.AvE.merged = merge(annots, top.A.AvE, by = "row.names")
@@ -117,18 +116,27 @@ genes.B.BvA = unique(top.B.BvA.merged$locus)
 genes.Diff = unique(top.Diff.merged$locus)
 genes.A.AvE = unique(top.A.AvE.merged$locus)
 
-#shows the log fold changes of each compared treatment
 logFC = top.Diff.merged[,'logFC']
 logFC_AvE = top.A.AvE.merged[,'logFC']
 logFC_BvE = top.B.BvA.merged[,'logFC']
+
 ```
 
+####Conclusion
+
+By using the same methods to conduct analyses as Muller et al, we found the same number of significantly differentially expressed genes between the Cytokinin + Auxin group and the Ethanol/Mock group.  Those two genes, (At1g7540 (a cytokinin oxidase) and At2g33830 (a gene associated with bud dormancy)) are the same as the researchers found.
 
 ####Limitations
 
+The biggest limitations in this study are that more comparisons were not made and the p-value could be considered negligible.  
 
+Since cytokinin  plus auxin was compared with a simple ethanol-treated group, it only makes sense that cytokinin-responsive genes and bud dormancy genes would be differentially expressed.  Comparisons among and between other treatment types should be made to truly understand the implications of an auxin-cytokinin pathway in the context of apical dominance.  
+
+Additionally, a lower p-value, such as that of .01 or even .001 could lead to a better understanding of the genes that are truly differentially expressed in relation to auxin-cytokinin in apical dominance.
 
 ####Discussion
+
+A cytokinin treatment alone should have been added to the variables in order to understand the true difference between cytokinin and auxin.  Further studies could then be conducted to compare a cytokinin vs auxin group with a cytokinin vs ethanol group.  Those relationships could be further tested against the original variables that we reviewed in this study.
 
 ####Works Cited
         
